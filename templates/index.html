@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Úkolníček</title>
+
+
+
+</head>
+<body>
+
+
+{% if logged == 0 %}
+
+<h1>Přihlášení</h1>
+
+<form action ="/" method = 'POST'>
+    <label for="username_id">Jméno</label>
+    <input type="text" name="username" id="username_id">
+    <label for="password_id">Heslo</label>
+    <input type="text" name="password" id="password_id">
+    <input type="submit" value="Přihlásit">
+    <a href="/register">Registrace</a>
+</form>
+
+{% else %}
+
+<h1>Moje úkoly</h1>
+<a href="/logout">Logout</a>
+
+<table>
+        <tr>
+            <th>Úkole</th>
+            <th>Splnit</th>
+            <th>Smazat</th>
+        </tr>
+        {% for task in tasks %}
+
+        {% if task.date_TBD and task.date_TBD < current_time %}
+
+
+        <tr style="background-color:red;">
+                <td><a href="/detail/{{task.id}}">{{task.title}}</a></td>
+                <td>
+                    <form action="/task_done/{{task.id}}" method="POST">
+                        <input type="submit" value="Označit jako splněný" />
+                    </form>
+                <td>
+                    <a href="/delete/{{task.id}}">Delete</a>
+                </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td><a href="/detail/{{task.id}}">{{task.title}}</a></td>
+            <td>
+                <form action="/task_done/{{task.id}}" method="POST">
+                    <input type="submit" value="Označit jako splněný" />
+                </form>
+            <td>
+                <a href="/delete/{{task.id}}">Delete</a>
+            </td>
+        </tr>
+
+        {% endif %}
+        {% endfor %}
+
+</table>
+
+<h3>Zapsat nový úkol</h3>
+      <form action ="/" method = 'POST'
+         enctype = "multipart/form-data">
+          <label for="title_id">Titulek</label>
+          <input type="text" name="title" id="title_id">
+          <label for="content_id">Obsah</label>
+          <input type="text" name="content" id="content_id">
+          <label for="date_TBD_id">Termín</label>
+          <input type="datetime-local" name= "date_TBD" id="date_TBD_id"/>
+          <input type = "file" name = "file" />
+          <input type="submit" value="Přidat úkol">
+      </form>
+
+
+{% endif %}
+</body>
+</html>
+
+
+
+
+
+
