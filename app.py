@@ -93,20 +93,20 @@ def index():
         else:
             return render_template('index.html', logged=False)
 
-
-
-
     else:
         if request.method == 'POST':
             task_title = request.form['title']
             task_content = request.form['content']
 
-            date_tbd = datetime.strptime(request.form['date_TBD'], '%Y-%m-%dT%H:%M')
 
             file = request.files['file']
             task_rec = Todo(content=task_content, title=task_title,
                             filename=file.filename, file_data=file.read(),
-                            user_id=current_user.get_id(), date_TBD=date_tbd)
+                            user_id=current_user.get_id())
+
+            if request.form['date_TBD'] != '':
+                date_tbd = datetime.strptime(request.form['date_TBD'], '%Y-%m-%dT%H:%M')
+                task_rec.date_TBD = date_tbd
 
             db.session.add(task_rec)
             db.session.commit()
